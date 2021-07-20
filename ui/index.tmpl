@@ -1,0 +1,158 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+      .inputform {
+        padding-bottom: 10px;
+      }
+      .form-group {
+        padding: 5px;
+      }
+      .form-row {
+        padding: 2px;
+      }
+      .form-row .col{
+        padding: 2px;
+      }
+    </style>
+    <title>Hello, There!</title>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+          <img src="https://golang.org/lib/godoc/images/go-logo-blue.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+          Contacts
+        </a>
+      </nav>
+      <div id="inputform" class="inputform">
+        <form class="form" id="contactForm" name="contactForm" enctype="multipart/form-data" onsubmit="postcontact(event)">
+          <div class="form-group">
+            <div class="form-row row">
+              <div class="col">
+                <input type="text" id="first_name" class="form-control" name="first_name" placeholder="First name" required>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name">
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="col">
+                <input type="text" id="email" name="email" class="form-control" for="email" placeholder="Email id" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" name="phone_numbers" id="phone_numbers" aria-describedby="multiplenumber"placeholder="Mobile Number" pattern="^([0-9]|#|\+|\*|,|\)|\()+$" required>
+                <small id="multiplenumber" class="form-text text-muted">Enter comma to seperate more than one mobile number</small>
+              </div>
+            </div>
+            
+          </div>
+          
+          
+          <button type="submit" id="contactFormSubmit" class="btn btn-primary">Submit</button>
+          <input class="btn btn-primary" type="reset" value="Reset">
+        </form>
+      </div>
+
+      <div class="jumbotron" >
+        <table class="table" id="contactTable">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Full Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Contacts</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+        </div>
+    </div>
+    <script>
+      
+      // will return the host name and port
+      var host = window.location.origin; 
+      console.log(host);
+      
+      console.log("contact form");
+      function postcontact(e){
+        e.preventDefault();
+        let first_name=document.getElementById('first_name').value
+        let last_name=document.getElementById('last_name').value
+        let contact=document.getElementById('phone_numbers').value
+        contact=contact.split(",")
+        let email=document.getElementById('email').value
+
+        let payload={
+          "first_name":first_name,
+          "last_name":last_name,
+          "email":email,
+          "phone_numbers":contact
+        }
+        console.log(payload)
+        fetch(host+'/contacts',{
+          method: 'POST',
+          body: JSON.stringify(payload),
+        }).then(function(response){
+          first_name=document.getElementById('first_name').value=''
+          last_name=document.getElementById('last_name').value=''
+          contact=document.getElementById('phone_numbers').value=''
+          email=document.getElementById('email').value=''
+          return response.text();
+        }).then(function (text){
+          console.log(text);
+        }).catch(function (error){
+          console.log("Failed to Post contact data")
+          console.error(error);
+        })
+        document.getElementsByName('contactForm').reset
+        
+      }
+      
+      const contactform = document.getElementById('contactForm');
+      console.log(contactform);
+      contactform.addEventListener('sumbit', function (e){
+        e.preventDefault();
+        const contactData = new FormData(this);
+        console.log(contactData);
+        
+
+      });
+      
+      fetch(host+'/contacts')
+      .then((response) => response.json())
+      .then((json) => json.forEach(tableElements)
+      
+      ).catch(function(error){
+        console.log("Something went wrong while fetching contact data");
+            console.error(error);
+      });
+
+      function tableElements (element, index, arr){
+        arr[index] = document.querySelector('#contactTable').innerHTML +=
+        `<tr>
+            <td>${element.full_name}</td>
+            <td>${element.email}</td>
+            <td>${element.phone_numbers}</td>
+        </tr>`
+      };
+      
+      
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+  </body>
+</html>
+

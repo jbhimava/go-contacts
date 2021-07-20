@@ -13,7 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/lib/pq"
-	_ "github.com/lib/pq"
 	"github.com/ttacon/libphonenumber"
 )
 type getUserRequest struct {
@@ -54,6 +53,7 @@ func getUsers(ctx *gin.Context) {
 }
 
 func validateRequest( user postUserRequest) (bool,error){
+	fmt.Println(user)
 	if user.Email == "" || ! strings.Contains(user.Email,"@"){
 		return false, errors.New("Incorrect or missing email id")
 	}
@@ -169,8 +169,15 @@ func main(){
 	router := gin.Default()
 	handlers := gin.New()
 	handlers.Use(gin.Recovery())
-	router.GET("/", getUsers)
-	router.POST("/", addUsers)
+	router.LoadHTMLGlob("ui/*")
+	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"title": "Main website",
+		})
+	})
+	router.GET("/contacts", getUsers)
+	router.POST("/contacts", addUsers)
 	server_host := os.Getenv("SERVER_HOST")
 	server_port := os.Getenv("SERVER_PORT")
 	if server_host == "" || server_port == "" {
