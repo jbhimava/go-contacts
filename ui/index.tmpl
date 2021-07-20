@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -21,17 +20,23 @@
       .form-row .col{
         padding: 2px;
       }
+      .refresh{
+        padding-bottom: 10px;
+      }
     </style>
     <title>Hello, There!</title>
   </head>
   <body>
     <div class="container">
+      <!-- Navibar -->
       <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">
           <img src="https://golang.org/lib/godoc/images/go-logo-blue.svg" width="30" height="30" class="d-inline-block align-top" alt="">
           Contacts
         </a>
       </nav>
+      <!-- Ended Navibar -->
+      <!-- Contact information submit form -->
       <div id="inputform" class="inputform">
         <form class="form" id="contactForm" name="contactForm" enctype="multipart/form-data" onsubmit="postcontact(event)">
           <div class="form-group">
@@ -60,8 +65,13 @@
           <input class="btn btn-primary" type="reset" value="Reset">
         </form>
       </div>
-
+      <!-- Contact information form ended -->
+      <!-- Table to show existing user contacts information -->
       <div class="jumbotron" >
+        <div class="text-right refresh">
+          <button type="button" class="btn btn-outline-info pull-right" onclick="window.location.reload();">Refresh</button>
+        </div>
+        
         <table class="table" id="contactTable">
           <thead class="thead-dark">
             <tr>
@@ -75,6 +85,7 @@
           </tbody>
         </table>
         </div>
+        <!-- Contact info table ended -->
     </div>
     <script>
       
@@ -83,7 +94,9 @@
       console.log(host);
       
       console.log("contact form");
-      function postcontact(e){
+
+      // fetch request to submit the form
+      async function postcontact(e){
         e.preventDefault();
         let first_name=document.getElementById('first_name').value
         let last_name=document.getElementById('last_name').value
@@ -117,16 +130,19 @@
         
       }
       
-      const contactform = document.getElementById('contactForm');
-      console.log(contactform);
-      contactform.addEventListener('sumbit', function (e){
-        e.preventDefault();
-        const contactData = new FormData(this);
-        console.log(contactData);
+      // commenting the following code since I am unsuere why I was not able to fix for a while as a work around I added onsubmit funtion to handle the post request
+      // const contactform = document.getElementById('contactForm');
+      // console.log(contactform);
+      // contactform.addEventListener('sumbit', function (e){
+      //   e.preventDefault();
+      //   const contactData = new FormData(this);
+      //   console.log(contactData);
         
 
-      });
+      // });
       
+      // Fetch existing contact information for the users
+
       fetch(host+'/contacts')
       .then((response) => response.json())
       .then((json) => json.forEach(tableElements)

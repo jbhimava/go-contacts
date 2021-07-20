@@ -1,4 +1,7 @@
+-- Database tables to store User contact information
+-- To store user contact information and minimize the redunduncy userinformation is normalized to two tables as following 
 
+-- Users table to store user information except phone numbers
 CREATE TABLE IF NOT EXISTS users (
     id serial PRIMARY KEY,
     first_name varchar(30) NOT NULL,
@@ -9,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 );
 
+-- normalized user contact information table to store phone numbers for each user
 CREATE TABLE IF NOT EXISTS contacts(
     id serial PRIMARY KEY,
     user_id int REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
