@@ -4,14 +4,14 @@ Demo Web Application for Adding user contact information
 A simple web application with Go using
 
 1. GIN Framework
-2. Postgress
+2. Postgres
 3. HTML/JavaScript
 
 ![Demo App](demo_app.png)
 
-
 ## API List
-### GET : Get all contancts
+
+### GET : Get all contacts
 ```
 GET /contacts HTTP/1.1
 Host: localhost:8080
@@ -31,19 +31,27 @@ Content-Type: application/json
 
 ## Quick Start
 
-1. Clone GO-Contantacs repo to your local and add environment varialbes required , rename `.env_sample` to `.env`  
+1. Clone GO-Contanct repo to your local and add environment variables required , rename `.sample_env` to `.env`  
 2. After updating the `.env` file run the following commands from root folder
-3. Create users & contacts tables to your db schema by using [data.sql](data.sql)
+3. Create users & contacts tables to your DB schema by using [data.sql](data.sql)
 
 ```
 go mod tidy
 go run .
 ```
-> All set to add and retrive user contact information using go web server
+> All set to add and retrieve user contact information using go web server
 
 ## Useful resources
 - [GO Lang](https://golang.org/doc/tutorial/getting-started)
 - [GO Lang with GIN for REST API](https://golang.org/doc/tutorial/web-service-gin)
 - [Postgres](https://pkg.go.dev/github.com/lib/pq)
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+
+## Todo
+* More elegance config
+* Add Test Coverage
+* Improve error handling
+* Project/code structure optimize
+* Add Build scripts
+
 
