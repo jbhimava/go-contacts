@@ -32,8 +32,8 @@ Content-Type: application/json
 ## Quick Start
 
 1. Clone GO-Contanct repo to your local and add environment variables required , rename `.sample_env` to `.env`  
-2. After updating the `.env` file run the following commands from root folder
-3. Create users & contacts tables to your DB schema by using [data.sql](data.sql)
+2. Add users & contacts tables to your DB schema by running the create table script from [data.sql](data.sql)
+3. After updating the `.env` file run the following commands from root folder
 
 ```
 go mod tidy
