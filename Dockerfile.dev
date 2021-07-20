@@ -9,10 +9,13 @@ COPY . /go/src/go-contacts
 
 WORKDIR /go/src/go-contacts
 
+# TO install dependency packages
 RUN go mod tidy
 
+# to build the executable
 RUN go build .
 
+# container port
 EXPOSE 8080
 
 ENTRYPOINT ["./contacts"]
