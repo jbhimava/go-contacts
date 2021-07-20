@@ -128,7 +128,7 @@ func addUsers(ctx *gin.Context){
 	}
 	// finally! commiting the transaction changs if no errors
 	tx.Commit()
-	ctx.IndentedJSON(http.StatusCreated, "success")
+	ctx.IndentedJSON(http.StatusCreated, "successfully created new contact")
 }
 
 

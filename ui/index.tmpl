@@ -115,18 +115,24 @@
           method: 'POST',
           body: JSON.stringify(payload),
         }).then(function(response){
-          first_name=document.getElementById('first_name').value=''
-          last_name=document.getElementById('last_name').value=''
-          contact=document.getElementById('phone_numbers').value=''
-          email=document.getElementById('email').value=''
+          
           return response.text();
         }).then(function (text){
           console.log(text);
+          alert(text);
+          
+            first_name=document.getElementById('first_name').value='';
+            last_name=document.getElementById('last_name').value='';
+            contact=document.getElementById('phone_numbers').value='';
+            email=document.getElementById('email').value='';
+          
+          
         }).catch(function (error){
           console.log("Failed to Post contact data")
           console.error(error);
+          alert("Failed with following error: \n"+error)
         })
-        document.getElementsByName('contactForm').reset
+        // document.getElementsByName('contactForm').reset
         
       }
       
