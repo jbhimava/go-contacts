@@ -19,9 +19,9 @@ import (
 	"github.com/ttacon/libphonenumber"
 )
 
-// User contacts to be stored in relation database with web interface to insert and retreve data
+// User contacts to be stored in relation database with web interface to insert and retrieve data
 // Ensure to add create tables added in the data.sql to the database schema
-// database is normalized to sotre user contact information in to two tables users & contacts 
+// database is normalized to store user contact information in to two tables users & contacts 
 // Assumptions:
 // Every user will have unique email id, could have 1 to n number of mobile numbers
 
@@ -76,11 +76,11 @@ func addUsers(ctx *gin.Context){
 	// initiate db connection
 	db := SetupDB()
 	
-	// Transaction statement intitiation
+	// Transaction statement initiation
 	// As we  are inserting new record in to db table user has forign key reference for storing contact records
 	// As mentioned in the assumption one user may have multiple contact number, contacts is a normalized talble to store user mobile numbers
 	
-	// Todo: Although following db transaction functinality works as expected but there is a room for improvement
+	// Todo: Although following db transaction functionality works as expected but there is a room for improvement
 	// when hadling the reference data 
 	tx, txerr := db.Begin()
 	if txerr!=nil{
@@ -95,7 +95,7 @@ func addUsers(ctx *gin.Context){
 	// Todo: Improve following error handling
 	// Though I have added the minimal validation required at client level
 	// I want to ensure API request is properly validated and handled the exception
-	// However endup writing validateRequest function which serves the purpost but could have improved
+	// However ended writing validateRequest function which serves the purpose but could have improved
 
 	_, validationerr:=validateRequest(user)
 	if validationerr!=nil{
@@ -104,11 +104,11 @@ func addUsers(ctx *gin.Context){
 		log.Panicln(validationerr)
 	}
 	// insert statement for creating new user
-	inserUserSmt := "INSERT INTO users (first_name, last_name, email) values($1, $2, $3) RETURNING id"
+	insertUserSmt := "INSERT INTO users (first_name, last_name, email) values($1, $2, $3) RETURNING id"
 	// insert statement for adding new user contact number
 	insertPhoneNumber := "INSERT INTO contacts (number, user_id) values ($1, $2)"
 	id := 0
-	dberr := tx.QueryRow(inserUserSmt,user.FirstName,user.LastName,user.Email).Scan(&id)
+	dberr := tx.QueryRow(insertUserSmt,user.FirstName,user.LastName,user.Email).Scan(&id)
 	// gracefully handling the exception
 	if dberr != nil{
 		tx.Rollback()
@@ -126,7 +126,7 @@ func addUsers(ctx *gin.Context){
 			
 		}
 	}
-	// finally! commiting the transaction changs if no errors
+	// finally! commiting the transaction change if no errors
 	tx.Commit()
 	ctx.IndentedJSON(http.StatusCreated, "successfully created new contact")
 }
@@ -151,7 +151,7 @@ func validateRequest( user postUserRequest) (bool,error){
 		return false, errors.New("Empty phone_numbers list")
 	}else if len(user.Contacts) > 0  {
 		// Validation contact numbers with google port in libphonenumber golang library
-		// prodived dynamic parsing with respect to regioun provided
+		// prodived dynamic parsing with respect to region provided
 		for _, contact:= range user.Contacts{
 			phoneNumber, contacterr := libphonenumber.Parse(contact,"AU")
 			if contacterr!=nil{
@@ -169,7 +169,7 @@ func validateRequest( user postUserRequest) (bool,error){
 
 
 
-// db serup config initiation file
+// db setup config initiation file
 // returns open connection db object that can be used to interact with the database
 // exits code with error message incase of failure
 func SetupDB() *sql.DB {
@@ -192,7 +192,7 @@ func SetupDB() *sql.DB {
 	return db
   }
 
-// error handling function to log the error with addition of custome message
+// error handling function to log the error with addition of custom message
 //  to keep service recovered from error and capture the error related info
 func checkErr(err error, msg string) {
 	if err != nil {
@@ -203,7 +203,7 @@ func checkErr(err error, msg string) {
 // error handling function to exit the running code 
 func exitErr(err error, msg string) {
 	if err != nil {
-		// logs the error with custome message before exit
+		// logs the error with custom message before exit
 		log.Fatalln(msg, err)
 	}
 }
@@ -212,7 +212,7 @@ func exitErr(err error, msg string) {
 func main(){
 	
 	// loads the .env file from project root folder
-	// incase of failure to load .env througs fatal error
+	// incase of failure to load .env through fatal error
 
 	err := godotenv.Load()
 	exitErr(err,"Error loading .env file")
@@ -237,7 +237,7 @@ func main(){
 	router.POST("/contacts", addUsers)
 
 	//loading server environment files
-	//incase of incorrect configueration throughs fatal error with exit code
+	//incase of incorrect configuration throughs fatal error with exit code
 	server_host := os.Getenv("SERVER_HOST")
 	server_port := os.Getenv("SERVER_PORT")
 	if server_host == "" || server_port == "" {
